@@ -1,6 +1,5 @@
 using System;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 namespace Workshop.Student
 {
@@ -36,19 +35,18 @@ namespace Workshop.Student
                 for (int x = 0; x < columns; x++)
                 {
                     int r = UnityEngine.Random.Range(0, floorTiles.Length);
-                    GameObject tile = Instantiate(
-                        floorTiles[r],
-                        new Vector2(x, y),
-                        Quaternion.identity);
-                    tile.name = "Floor " + x + "_" + y;
+                    GameObject tile = Instantiate(floorTiles[r], new Vector2(x, y), Quaternion.identity);
+                    tile.name = "Floor" + x + "_" + y;
+
                 }
             }
+
             // 4. create walls
             for (int y = -1; y < rows + 1; y++)
             {
                 for (int x = -1; x < columns + 1; x++)
                 {
-                    if (x == -1 || y == -1 || x == rows || y == columns)
+                    if (x == -1 || y == -1 || x == columns || y == rows)
                     {
                         int r = UnityEngine.Random.Range(0, wallTiles.Length);
                         GameObject tile = Instantiate(
@@ -58,37 +56,40 @@ namespace Workshop.Student
                         tile.name = "wall " + x + "_" + y;
                     }
                 }
+
             }
+
             // 5. random foods
-            int numberOffood = UnityEngine.Random.Range(2, 3);
-            for (int i = 0; i < numberOffood; i++)
+            int numberOfFood = UnityEngine.Random.Range(2, 3);
+            for (int i = 0; i < numberOfFood; i++)
             {
-                int FoodXposition = UnityEngine.Random.Range(0, columns);
-                int FoodYposition = UnityEngine.Random.Range(0, rows);
-                int r =UnityEngine.Random.Range(0, floorTiles.Length);
-                Instantiate(
-                    foodTiles[0],
-                    new Vector2(FoodYposition, FoodYposition),
-                    Quaternion.identity);
+                int FoodXpositon = UnityEngine.Random.Range(0, columns);
+                int FoodYpositon = UnityEngine.Random.Range(0, rows);
+                int r = UnityEngine.Random.Range(0, foodTiles.Length);
+                Instantiate(foodTiles[r], new Vector2(FoodXpositon, FoodYpositon), Quaternion.identity);
             }
             // 6. generate item along with the saveItemMap
-            for (int y = 0; y < saveItemMap.GetLength(0); y++) 
+            for (int y = 0; y < saveItemMap.GetLength(0); y++)
             {
-                for (int x = 0; x < saveItemMap.GetLength(1); x++)
-                { 
-                string item = saveItemMap[x, y];
-                    if ( string.IsNullOrEmpty(item))
-                            {
-                foreach (var food in foodTiles) 
+                for(int x = 0; x < saveItemMap.GetLength(1); x++)
                 {
-                    Instantiate(food, new Vector2(x, y), Quaternion.identity);
+                    string item = saveItemMap[x, y];
+                    if (!string.IsNullOrEmpty(item))
+                        foreach (var food in foodTiles)
+                        {
+                            if(food.name == item)
+                            {
+                                Instantiate(food,new Vector2(x,y), Quaternion.identity);    
+                            }
+                        }
+
                 }
             }
-        }
-    }
+
             // 7. place exit
 
-        }
-    }
 
+        }
+
+    }
 }
